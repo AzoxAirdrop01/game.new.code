@@ -1,0 +1,13 @@
+{
+  "name": "azox-battle-arena",
+  "version": "1.0.0",
+  "description": "3D Multiplayer Tactical FPS Game - Solana Azox Ecosystem",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  }
+}

@@ -1,0 +1,1 @@
+// Azox Tactical System: CONTROLS.JS\nexport default class {};

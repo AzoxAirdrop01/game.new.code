@@ -1,0 +1,1 @@
+// Azox Tactical System: AI.JS\nexport default class {};

@@ -1,0 +1,5 @@
+body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #050508; color: #00f0ff; font-family: monospace; }
+#game-canvas { width: 100%; height: 100%; display: block; position: absolute; }
+.screen { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(5,5,8,0.9); z-index: 10; }
+.neon-title { font-size: 2.5rem; text-shadow: 0 0 10px #00f0ff; }
+.primary-btn { background: #00f0ff; border: none; padding: 15px 30px; font-weight: bold; cursor: pointer; margin-top: 20px; }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AZOX World Battle Arena</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <canvas id="game-canvas"></canvas>
+    
+    <div id="hud" style="display:none;">
+        <div id="game-timer">05:00</div>
+        <div id="crosshair">+</div>
+    </div>
+
+    <div id="menu-screen" class="screen active">
+        <h1 class="neon-title">AZOX BATTLE ARENA</h1>
+        <input type="text" id="player-name" placeholder="ENTER YOUR NAME" value="Azad_Solana">
+        <button class="primary-btn" onclick="alert('Connecting to Railway...')">START BATTLE</button>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+        }
+      }
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="js/game.js"></script>
+</body>
+</html>
