@@ -1,1 +1,0 @@
-// Azox Tactical System: PHYSICS.JS\nexport default class {};
