@@ -1,1 +1,0 @@
-// Azox Tactical System: MULTIPLAYER.JS\nexport default class {};
