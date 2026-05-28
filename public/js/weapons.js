@@ -1,1 +1,0 @@
-// Azox Tactical System: WEAPONS.JS\nexport default class {};
