@@ -1001,8 +1001,9 @@ await Promise.race([loadPromise, timeoutPromise]);
         this.buildMap(config.map || 'snow');
     }
 
-    setPlayerId(id) {
-        this.localPlayer.id = id;
+    startGame(config) {
+        this.gameRunning = true;
+        this.buildMap(config.map || 'snow');
     }
 }
 
