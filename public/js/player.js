@@ -1,1 +1,0 @@
-// Azox Tactical System: PLAYER.JS\nexport default class {};
