@@ -269,10 +269,17 @@ class AZOXGame {
             );
         });
 
-        // Load in parallel, 5 at a time
-        for (let i = 0; i < allModels.length; i += 5) {
-            await Promise.all(allModels.slice(i, i+5).map(loadOne));
-        }
+        // Timeout safety — max 15 seconds total
+const timeoutPromise = new Promise(resolve => setTimeout(resolve, 15000));
+
+const loadPromise = (async () => {
+    for (let i = 0; i < allModels.length; i += 5) {
+        await Promise.all(allModels.slice(i, i+5).map(loadOne));
+    }
+})();
+
+await Promise.race([loadPromise, timeoutPromise]);
+        
 
         console.log('✅ All models loaded:', [...this.models.keys()]);
 
