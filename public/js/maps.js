@@ -1,1 +1,0 @@
-// Azox Tactical System: MAPS.JS\nexport default class {};
