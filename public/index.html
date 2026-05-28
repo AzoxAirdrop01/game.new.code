@@ -2,32 +2,240 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>AZOX World Battle Arena</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+<!-- ORIENTATION WARNING -->
+<div id="orientation-warning">
+    <div class="orient-content">
+        <div class="orient-icon">📱</div>
+        <h1>Rotate Your Device</h1>
+        <p>AZOX requires landscape mode</p>
+    </div>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loading-overlay">
+    <div class="loading-inner">
+        <div class="loading-logo">AZOX</div>
+        <div class="loading-sub">WORLD BATTLE ARENA</div>
+        <div class="loading-bar-wrap">
+            <div id="loading-bar-fill"></div>
+        </div>
+        <div id="loading-text">Initializing...</div>
+    </div>
+</div>
+
+<!-- GAME -->
+<div id="game-container">
     <canvas id="game-canvas"></canvas>
-    
-    <div id="hud" style="display:none;">
-        <div id="game-timer">05:00</div>
-        <div id="crosshair">+</div>
+
+    <!-- Crosshair -->
+    <div id="crosshair">
+        <div class="ch-h"></div>
+        <div class="ch-v"></div>
     </div>
 
-    <div id="menu-screen" class="screen active">
-        <h1 class="neon-title">AZOX BATTLE ARENA</h1>
-        <input type="text" id="player-name" placeholder="ENTER YOUR NAME" value="Azad_Solana">
-        <button class="primary-btn" onclick="alert('Connecting to Railway...')">START BATTLE</button>
+    <!-- Scope Overlay -->
+    <div id="scope-overlay">
+        <div class="scope-ring"></div>
+        <div class="scope-h"></div>
+        <div class="scope-v"></div>
+        <div class="scope-dot"></div>
     </div>
 
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-        }
-      }
-    </script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script type="module" src="js/game.js"></script>
+    <!-- Hit Flash -->
+    <div id="hit-flash"></div>
+
+    <!-- HUD -->
+    <div id="hud-radar" class="hud-el hidden">
+        <canvas id="radar-canvas" width="130" height="130"></canvas>
+        <div class="radar-label">RADAR</div>
+    </div>
+
+    <div id="hud-health" class="hud-el hidden">
+        <div class="health-pips">
+            <div class="pip" id="pip-1"></div>
+            <div class="pip" id="pip-2"></div>
+            <div class="pip" id="pip-3"></div>
+        </div>
+        <span id="health-text">3 / 3</span>
+    </div>
+
+    <div id="hud-weapon" class="hud-el hidden">
+        <div id="weapon-name">Pistol</div>
+        <div id="ammo-count">12 / 8</div>
+        <div id="weapon-slots">
+            <span class="wslot active" data-w="pistol">1</span>
+            <span class="wslot" data-w="ak">2</span>
+            <span class="wslot" data-w="m4">3</span>
+            <span class="wslot" data-w="bkc">4</span>
+            <span class="wslot" data-w="sniper">5</span>
+        </div>
+    </div>
+
+    <div id="hud-stats" class="hud-el hidden">
+        <div id="game-timer">00:00</div>
+        <div id="kill-score">KILLS: 0</div>
+        <div id="team-scores"></div>
+    </div>
+
+    <div id="kill-feed"></div>
+
+    <!-- MOBILE CONTROLS -->
+    <div id="mobile-controls" class="hidden">
+        <div id="joystick-move-zone" class="joystick-zone left-zone">
+            <div id="joystick-move-base" class="joystick-base">
+                <div id="joystick-move-knob" class="joystick-knob"></div>
+            </div>
+        </div>
+
+        <div id="left-btns">
+            <button id="btn-sprint" class="mob-btn">SPRINT</button>
+            <button id="btn-crouch" class="mob-btn">CROUCH</button>
+        </div>
+
+        <div id="joystick-look-zone" class="joystick-zone right-zone">
+            <div id="joystick-look-base" class="joystick-base">
+                <div id="joystick-look-knob" class="joystick-knob"></div>
+            </div>
+        </div>
+
+        <div id="right-btns">
+            <button id="btn-fire"   class="mob-btn fire-btn">FIRE</button>
+            <button id="btn-scope"  class="mob-btn">SCOPE</button>
+            <button id="btn-reload" class="mob-btn">RELOAD</button>
+            <button id="btn-switch" class="mob-btn">SWITCH</button>
+        </div>
+    </div>
+
+    <!-- Dead Overlay -->
+    <div id="dead-overlay">
+        <div class="dead-content">
+            <div class="dead-icon">💀</div>
+            <h2>ELIMINATED</h2>
+            <p>Spectating...</p>
+        </div>
+    </div>
+
+    <!-- Game Over -->
+    <div id="gameover-overlay">
+        <div class="gameover-box">
+            <div id="gameover-title">GAME OVER</div>
+            <div id="gameover-scores"></div>
+            <button id="btn-play-again" class="menu-btn primary">Play Again</button>
+        </div>
+    </div>
+
+    <!-- MENU OVERLAY -->
+    <div id="menu-overlay">
+        <div class="menu-container">
+
+            <div class="menu-logo">
+                <span class="logo-azox">AZOX</span>
+                <span class="logo-sub">WORLD BATTLE ARENA</span>
+            </div>
+
+            <!-- LOBBY -->
+            <div id="lobby-menu">
+                <input type="text" id="input-player-name"
+                    placeholder="Your name" maxlength="16" class="menu-input">
+                <button id="btn-create-room" class="menu-btn primary">
+                    ⚔️ Create Room
+                </button>
+                <div class="divider">— OR —</div>
+                <div class="join-row">
+                    <input type="text" id="input-room-code"
+                        placeholder="Room code" maxlength="6" class="menu-input code-input">
+                    <button id="btn-join-room" class="menu-btn join-btn">Join</button>
+                </div>
+            </div>
+
+            <!-- MODE SELECT -->
+            <div id="mode-selection-menu" class="hidden">
+                <h2 class="menu-section-title">Select Game Mode</h2>
+
+                <button class="mode-btn" data-mode="FREE_FOR_ALL">
+                    <span class="mode-icon">⚔️</span>
+                    <span class="mode-info">
+                        <b>Free For All</b>
+                        <small>Everyone vs Everyone</small>
+                    </span>
+                </button>
+
+                <button class="mode-btn" data-mode="TEAM_BATTLE">
+                    <span class="mode-icon">🛡️</span>
+                    <span class="mode-info">
+                        <b>Team Battle</b>
+                        <small>Up to 12 teams</small>
+                    </span>
+                </button>
+
+                <button class="mode-btn" data-mode="VS_COMPUTER">
+                    <span class="mode-icon">🤖</span>
+                    <span class="mode-info">
+                        <b>VS Computer</b>
+                        <small>Solo vs AI bots</small>
+                    </span>
+                </button>
+
+                <div class="map-row">
+                    <span class="map-label">Map:</span>
+                    <button class="map-btn active" data-map="snow">Snow</button>
+                    <button class="map-btn" data-map="desert">Desert</button>
+                    <button class="map-btn" data-map="natural">Natural</button>
+                </div>
+
+                <div id="team-select" class="hidden">
+                    <span class="map-label">Team:</span>
+                    <div id="team-buttons"></div>
+                </div>
+
+                <div id="difficulty-select" class="hidden">
+                    <span class="map-label">Difficulty:</span>
+                    <button class="diff-btn active" data-diff="easy">Easy</button>
+                    <button class="diff-btn" data-diff="medium">Medium</button>
+                    <button class="diff-btn" data-diff="hard">Hard</button>
+                </div>
+
+                <button id="btn-back" class="menu-btn back-btn">Back</button>
+            </div>
+
+            <!-- ROOM LOBBY -->
+            <div id="room-lobby-menu" class="hidden">
+                <div class="room-code-display">
+                    <div class="code-label">ROOM CODE</div>
+                    <span id="display-room-code">------</span>
+                    <button id="btn-copy-code" class="icon-btn">Copy</button>
+                </div>
+
+                <div id="player-list-wrap">
+                    <div class="list-header">Players</div>
+                    <ul id="player-list"></ul>
+                </div>
+
+                <button id="btn-start-game" class="menu-btn primary hidden">
+                    Start Game
+                </button>
+                <div id="waiting-msg" class="waiting-text">
+                    Waiting for host...
+                </div>
+                <button id="btn-leave-room" class="menu-btn secondary">Leave</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/ui-controller.js"></script>
+<script type="module" src="js/game.js"></script>
+<script type="module" src="js/controls.js"></script>
 </body>
 </html>
