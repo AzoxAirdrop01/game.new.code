@@ -13,20 +13,20 @@ const MODELS = {
     ENVIRONMENTS: [
         { name: 'hangar',     file: 'free_fire_old_hangar_3d_model.glb' },
         { name: 'warehouse',  file: 'abandoned_warehouse.glb' },
-        { name: 'warehouse2', file: 'warehouse.glb' },
-        { name: 'trench',     file: 'ww1_trench_low-poly.glb' }
+        { name: 'warehouse2', file: 'destroyed_warehouse_in_kaarina_finland.glb' },
+        { name: 'trench',     file: 'trench_set.glb' }
     ],
     BARRIERS: [
-        { name: 'barrier_wood',   file: 'barrier___wooden__barbed__wire_protection.glb' },
-        { name: 'damaged_wall',   file: 'damaged_wall.glb' },
-        { name: 'jersey',         file: 'jersey_barrier.glb' },
-        { name: 'wall_door',      file: 'wall_door.glb' },
-        { name: 'barrier',        file: 'barrier.glb' }
+        { name: 'barrier_wood', file: 'barrier.glb' },
+        { name: 'damaged_wall', file: 'damaged_wall.glb' },
+        { name: 'jersey',       file: 'jersey_barrier.glb' },
+        { name: 'wall_door',    file: 'wall_door_-_19mb.glb' },
+        { name: 'barrier',      file: 'trench_set.glb' }
     ],
     CHARACTER: { name: 'character', file: 'character_type_tactical_man_1.glb' },
     WEAPONS: [
         { name: 'pistol',  file: '9_mm.glb' },
-        { name: 'ak',      file: 'acr.glb' },
+        { name: 'ak',      file: 'ak-47_kalashnikov.glb' },
         { name: 'm4',      file: 'm4_carbine_rifle.glb' },
         { name: 'bkc',     file: 'm240b_machine_gun.glb' },
         { name: 'sniper',  file: 'low-poly_dragunov_svd.glb' }
@@ -269,14 +269,16 @@ class AZOXGame {
             );
         });
 
-        // Timeout safety — max 15 seconds total
-const timeoutPromise = new Promise(resolve => setTimeout(resolve, 15000));
-
-const loadPromise = (async () => {
+        // Load in parallel with 20s timeout
+const loadAll = async () => {
     for (let i = 0; i < allModels.length; i += 5) {
         await Promise.all(allModels.slice(i, i+5).map(loadOne));
     }
-})();
+};
+await Promise.race([
+    loadAll(),
+    new Promise(r => setTimeout(r, 20000))
+]);
 
 await Promise.race([loadPromise, timeoutPromise]);
         
