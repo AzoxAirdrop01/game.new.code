@@ -1,5 +1,5 @@
 // map_generator.js - AZOX Dense Map Generator
-import * as THREE from 'https://cdn.skypack.dev/three@0.150.1';
+import * as THREE from 'three';
 
 export const MAP_THEMES = {
     snow: {
