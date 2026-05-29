@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { AIManager } from './ai.js';
 import { MapGenerator } from './map_generator.js';
 
-const MODEL_BASE = './models/';
+const MODEL_BASE = 'https://pub-d62c5438a9d849a8927a0de7c5b97de6.r2.dev/';
 
 const MODELS = {
     ENVIRONMENTS: [
