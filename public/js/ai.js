@@ -1,5 +1,5 @@
 // ai.js - AZOX AI Bot System (VS Computer Mode)
-import * as THREE from 'https://cdn.skypack.dev/three@0.150.1';
+import * as THREE from 'three';
 
 const BOT_SETTINGS = {
     easy:   { speed:3.5, reactionMs:1200, accuracy:0.35, shootInterval:1800, viewRange:25 },
